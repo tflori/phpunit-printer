@@ -122,7 +122,7 @@ class TextPrinter extends ResultPrinter
     protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
     {
         if ($className != $this->previousClassName) {
-            $this->write(PHP_EOL . $this->formatWithColor('fg-magenta', $className) . PHP_EOL);
+            $this->write(PHP_EOL . $this->colorizeTextBox('fg-magenta', $className) . PHP_EOL);
             $this->previousClassName = $className;
         }
 
@@ -132,7 +132,7 @@ class TextPrinter extends ResultPrinter
             $this->numTestsRun+1,
             $this->numTests,
             $this->formatTestDuration($time),
-            $this->formatWithColor($color, "{$this->formatMethodName($methodName)}")
+            $this->colorizeTextBox($color, "{$this->formatMethodName($methodName)}")
         );
     }
     /**
@@ -186,7 +186,7 @@ class TextPrinter extends ResultPrinter
         $this->maxDuration = max($timeInMs, $this->maxDuration);
         $durationLength = strlen($this->maxDuration);
         $testDurationInMs = sprintf("%{$durationLength}d", $timeInMs);
-        $duration = $timeInMs > 500 ? $this->formatWithColor('fg-yellow', $testDurationInMs) : $testDurationInMs;
+        $duration = $timeInMs > 500 ? $this->colorizeTextBox('fg-yellow', $testDurationInMs) : $testDurationInMs;
         return sprintf('< %s ms', $duration);
     }
 
