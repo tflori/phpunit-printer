@@ -58,30 +58,5 @@ it, and it didn't have annotations.
 > If someone knows who has written that printer I would appreciate a hint to honor him in the author
 > section.
 
-Example:
-<pre>
-$ phpunit --color=always
-PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
-
-
-<span style="color: mediumpurple">Some\Name\CalculatorTest</span>
-  <span style="color: green">✔</span> ( 1 of 11; < 2 ms) <span style="color: grey">Returns The Sum with data set "1+2+3"</span>
-  <span style="color: green">✔</span> ( 2 of 11; < 1 ms) <span style="color: grey">Returns The Sum with data set "anything"</span>
-  <span style="color: green">✔</span> ( 3 of 11; < 1 ms) <span style="color: grey">Returns The Sum with data set "named"</span>
-  <span style="color: green">✔</span> ( 4 of 11; < 1 ms) <span style="color: grey">Returns The Power with data set #0</span>
-  <span style="color: green">✔</span> ( 5 of 11; < 1 ms) <span style="color: grey">Returns The Power with data set #1</span>
-
-<span style="color: mediumpurple">Some\Name\StatusTest</span>
-  <span style="color: green">✔</span> ( 6 of 11; < 1 ms) <span style="color: grey">Successful Tests Show Green Checkmark</span>
-  <span style="color: red">✖</span> ( 7 of 11; < 1 ms) <span style="color: red">Failing Tests Show Red Times Sign</span>
-  <span style="color: cyan">S</span> ( 8 of 11; < 1 ms) <span style="color: cyan">Skipped Tests Show Cyan S</span>
-  <span style="color: yellow">I</span> ( 9 of 11; < 1 ms) <span style="color: yellow">Incomplete Tests Show Yellow I</span>
-  <span style="color: yellow">R</span> (10 of 11; < 1 ms) <span style="color: yellow">Tests Without Assertions Show Yellow R</span>
-  <span style="color: red">!</span> (11 of 11; < 1 ms) <span style="color: red">Tests With Errors Show Red Exclamation Mark</span>
-
-
-Time: 17 ms, Memory: 4.00 MB
-...
-<span style="background: red">ERRORS!</span>
-<span style="background: red">Tests: 11</span><span style="background: red">, Assertions: 7</span><span style="background: red">, Errors: 1</span><span style="background: red">, Failures: 1</span><span style="background: red">, Skipped: 1</span><span style="background: red">, Incomplete: 1</span><span style="background: red">, Risky: 1</span><span style="background: red">.</span>
-</pre>
+Example:  
+![Text Printer](screenshots/text-printer.png)
