@@ -59,29 +59,29 @@ it, and it didn't have annotations.
 > section.
 
 Example:
-```console
+<pre>
 $ phpunit --color=always
 PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
 
 
-[35mSome\Name\CalculatorTest[0m
-  [32m✔[0m ( 1 of 11; < 2 ms) [37mReturns The Sum with data set "1+2+3"[0m
-  [32m✔[0m ( 2 of 11; < 1 ms) [37mReturns The Sum with data set "anything"[0m
-  [32m✔[0m ( 3 of 11; < 1 ms) [37mReturns The Sum with data set "named"[0m
-  [32m✔[0m ( 4 of 11; < 1 ms) [37mReturns The Power with data set #0[0m
-  [32m✔[0m ( 5 of 11; < 1 ms) [37mReturns The Power with data set #1[0m
+<span style="color: mediumpurple">Some\Name\CalculatorTest</span>
+  <span style="color: green">✔</span> ( 1 of 11; < 2 ms) <span style="color: grey">Returns The Sum with data set "1+2+3"</span>
+  <span style="color: green">✔</span> ( 2 of 11; < 1 ms) <span style="color: grey">Returns The Sum with data set "anything"</span>
+  <span style="color: green">✔</span> ( 3 of 11; < 1 ms) <span style="color: grey">Returns The Sum with data set "named"</span>
+  <span style="color: green">✔</span> ( 4 of 11; < 1 ms) <span style="color: grey">Returns The Power with data set #0</span>
+  <span style="color: green">✔</span> ( 5 of 11; < 1 ms) <span style="color: grey">Returns The Power with data set #1</span>
 
-[35mSome\Name\StatusTest[0m
-  [32m✔[0m ( 6 of 11; < 1 ms) [37mSuccessful Tests Show Green Checkmark[0m
-  [31m✖[0m ( 7 of 11; < 1 ms) [31mFailing Tests Show Red Times Sign[0m
-  [36mS[0m ( 8 of 11; < 1 ms) [36mSkipped Tests Show Cyan S[0m
-  [33mI[0m ( 9 of 11; < 1 ms) [33mIncomplete Tests Show Yellow I[0m
-  [33mR[0m (10 of 11; < 1 ms) [33mTests Without Assertions Show Yellow R[0m
-  [31m![0m (11 of 11; < 1 ms) [31mTests With Errors Show Red Exclamation Mark[0m
+<span style="color: mediumpurple">Some\Name\StatusTest</span>
+  <span style="color: green">✔</span> ( 6 of 11; < 1 ms) <span style="color: grey">Successful Tests Show Green Checkmark</span>
+  <span style="color: red">✖</span> ( 7 of 11; < 1 ms) <span style="color: red">Failing Tests Show Red Times Sign</span>
+  <span style="color: cyan">S</span> ( 8 of 11; < 1 ms) <span style="color: cyan">Skipped Tests Show Cyan S</span>
+  <span style="color: yellow">I</span> ( 9 of 11; < 1 ms) <span style="color: yellow">Incomplete Tests Show Yellow I</span>
+  <span style="color: yellow">R</span> (10 of 11; < 1 ms) <span style="color: yellow">Tests Without Assertions Show Yellow R</span>
+  <span style="color: red">!</span> (11 of 11; < 1 ms) <span style="color: red">Tests With Errors Show Red Exclamation Mark</span>
 
 
 Time: 17 ms, Memory: 4.00 MB
 ...
-[37;41mERRORS![0m
-[37;41mTests: 11[0m[37;41m, Assertions: 7[0m[37;41m, Errors: 1[0m[37;41m, Failures: 1[0m[37;41m, Skipped: 1[0m[37;41m, Incomplete: 1[0m[37;41m, Risky: 1[0m[37;41m.[0m
-```
+<span style="background: red">ERRORS!</span>
+<span style="background: red">Tests: 11</span><span style="background: red">, Assertions: 7</span><span style="background: red">, Errors: 1</span><span style="background: red">, Failures: 1</span><span style="background: red">, Skipped: 1</span><span style="background: red">, Incomplete: 1</span><span style="background: red">, Risky: 1</span><span style="background: red">.</span>
+</pre>
