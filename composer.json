@@ -3,8 +3,8 @@
     "description": "A printer for phpunit that prints the name of each test",
     "type": "library",
     "require": {
-        "phpunit/phpunit": "^8.0",
-        "php": "^7.2"
+        "phpunit/phpunit": "^9.0",
+        "php": "^7.3 || ^8.0"
     },
     "license": "MIT",
     "authors": [

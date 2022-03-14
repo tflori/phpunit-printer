@@ -5,9 +5,9 @@ namespace PhpUnitPrinter;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\Warning;
-use PHPUnit\TextUI\ResultPrinter;
+use PHPUnit\TextUI\DefaultResultPrinter;
 
-class TextPrinter extends ResultPrinter
+class TextPrinter extends DefaultResultPrinter
 {
     /**
      * Replacement symbols for test statuses.
