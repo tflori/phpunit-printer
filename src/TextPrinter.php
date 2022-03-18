@@ -9,20 +9,8 @@ use PHPUnit\TextUI\DefaultResultPrinter;
 
 class TextPrinter extends DefaultResultPrinter
 {
-    /**
-     * Replacement symbols for test statuses.
-     *
-     * @var array
-     */
-    protected static $symbols = [
-        'E' => "\e[31m!\e[0m", // red !
-        'F' => "\e[31m\xe2\x9c\x96\e[0m", // red X
-        'W' => "\e[33mW\e[0m", // yellow W
-        'I' => "\e[33mI\e[0m", // yellow I
-        'R' => "\e[33mR\e[0m", // yellow R
-        'S' => "\e[36mS\e[0m", // cyan S
-        '.' => "\e[32m\xe2\x9c\x94\e[0m", // green checkmark
-    ];
+    /** @var array Replacement symbols for test statuses */
+    protected $symbols;
 
     /** @var string */
     protected $testRow = '';
@@ -33,14 +21,34 @@ class TextPrinter extends DefaultResultPrinter
     /** @var int */
     protected $maxDuration = 1;
 
+    public function __construct(
+        $out = null,
+        bool $verbose = false,
+        string $colors = self::COLOR_DEFAULT,
+        bool $debug = false,
+        $numberOfColumns = 80,
+        bool $reverse = false
+    ) {
+        parent::__construct($out, $verbose, $colors, $debug, $numberOfColumns, $reverse);
+        $this->symbols = [
+            'E' => $this->colorizeTextBox('fg-red', '!'),
+            'F' => $this->colorizeTextBox('fg-red', "\xe2\x9c\x96"),
+            'W' => $this->colorizeTextBox('fg-yellow', 'W'),
+            'I' => $this->colorizeTextBox('fg-yellow', 'I'),
+            'R' => $this->colorizeTextBox('fg-yellow', 'R'),
+            'S' => $this->colorizeTextBox('fg-cyan', 'S'),
+            '.' => $this->colorizeTextBox('fg-green', "\xe2\x9c\x94"),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function writeProgress(string $progress): void
     {
         $this->numTestsRun++;
-        if ($this->hasReplacementSymbol($progress)) {
-            $progress = static::$symbols[$progress];
+        if (in_array($progress, array_keys($this->symbols))) {
+            $progress = $this->symbols[$progress];
         }
 
         $this->write("  {$progress} {$this->testRow}" . PHP_EOL);
@@ -50,7 +58,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addError(Test $test, \Throwable $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
+        $this->buildTestRow($test, $time, 'fg-red');
         parent::addError($test, $e, $time);
     }
     /**
@@ -58,7 +66,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
+        $this->buildTestRow($test, $time, 'fg-red');
         parent::addFailure($test, $e, $time);
     }
     /**
@@ -66,7 +74,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addWarning(Test $test, Warning $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+        $this->buildTestRow($test, $time, 'fg-yellow');
         parent::addWarning($test, $e, $time);
     }
     /**
@@ -74,7 +82,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addIncompleteTest(Test $test, \Throwable $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+        $this->buildTestRow($test, $time, 'fg-yellow');
         parent::addIncompleteTest($test, $e, $time);
     }
     /**
@@ -82,7 +90,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addRiskyTest(Test $test, \Throwable $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+        $this->buildTestRow($test, $time, 'fg-yellow');
         parent::addRiskyTest($test, $e, $time);
     }
     /**
@@ -90,7 +98,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function addSkippedTest(Test $test, \Throwable $e, float $time): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
+        $this->buildTestRow($test, $time, 'fg-cyan');
         parent::addSkippedTest($test, $e, $time);
     }
     /**
@@ -98,8 +106,7 @@ class TextPrinter extends DefaultResultPrinter
      */
     public function endTest(Test $test, float $time): void
     {
-        list($className, $methodName) = \PHPUnit\Util\Test::describe($test);
-        $this->buildTestRow($className, $methodName, $time);
+        $this->buildTestRow($test, $time);
         parent::endTest($test, $time);
     }
     /**
@@ -114,13 +121,13 @@ class TextPrinter extends DefaultResultPrinter
     /**
      * Formats the results for a single test.
      *
-     * @param $className
-     * @param $methodName
-     * @param $time
-     * @param $color
+     * @param Test $test
+     * @param float $time
+     * @param string $color
      */
-    protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
+    protected function buildTestRow(Test $test, float $time, string $color = 'fg-white'): void
     {
+        list($className, $methodName) = \PHPUnit\Util\Test::describe($test);
         if ($className != $this->previousClassName) {
             $this->write(PHP_EOL . $this->colorizeTextBox('fg-magenta', $className) . PHP_EOL);
             $this->previousClassName = $className;
@@ -128,20 +135,22 @@ class TextPrinter extends DefaultResultPrinter
 
         $testNumberLength = strlen($this->numTests);
         $this->testRow = sprintf(
-            "(%{$testNumberLength}d of %d; %s) %s",
+            "(%{$testNumberLength}d of %d; %s; %s) %s",
             $this->numTestsRun+1,
             $this->numTests,
             $this->formatTestDuration($time),
+            $this->formatAssertionCount($test->getNumAssertions()),
             $this->colorizeTextBox($color, "{$this->formatMethodName($methodName)}")
         );
     }
+
     /**
      * Makes the method name more readable.
      *
-     * @param $method
-     * @return mixed
+     * @param string $method
+     * @return string
      */
-    protected function formatMethodName($method)
+    protected function formatMethodName(string $method): string
     {
         $testDescription = ucfirst(
             $this->splitCamels(
@@ -153,23 +162,25 @@ class TextPrinter extends DefaultResultPrinter
         }
         return $testDescription;
     }
+
     /**
      * Replaces underscores in snake case with spaces.
      *
-     * @param $name
+     * @param string $name
      * @return string
      */
-    protected function splitSnakes($name)
+    protected function splitSnakes(string $name): string
     {
         return str_replace('_', ' ', $name);
     }
+
     /**
      * Splits camel-cased names while handling caps sections properly.
      *
-     * @param $name
+     * @param string $name
      * @return string
      */
-    protected function splitCamels($name)
+    protected function splitCamels(string $name): string
     {
         return preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' $1', $name);
     }
@@ -177,10 +188,10 @@ class TextPrinter extends DefaultResultPrinter
     /**
      * Colours the duration if the test took longer than 500ms.
      *
-     * @param $time
+     * @param float $time
      * @return string
      */
-    protected function formatTestDuration($time)
+    protected function formatTestDuration(float $time): string
     {
         $timeInMs = ceil($time * 1000);
         $this->maxDuration = max($timeInMs, $this->maxDuration);
@@ -191,13 +202,17 @@ class TextPrinter extends DefaultResultPrinter
     }
 
     /**
-     * Verifies if we have a replacement symbol available.
+     * Colours the assertion count if it is 0
      *
-     * @param $progress
-     * @return bool
+     * @param int $count
+     * @return string
      */
-    protected function hasReplacementSymbol($progress)
+    protected function formatAssertionCount(int $count): string
     {
-        return in_array($progress, array_keys(static::$symbols));
+        $text = $count . ' assertions';
+        if ($count <= 0) {
+            $text = $this->colorizeTextBox('fg-red', $text);
+        }
+        return $text;
     }
 }
